@@ -1,8 +1,25 @@
 #include <stdio.h>
 #include "engines/first-legal-move/first-legal-move.hpp"
+#include "engines/random-move/random-move.hpp"
 #include "chess-lib/chess.hpp"
 using namespace chess;
 
+const std::array<std::string, 3> PLAYERS = { "User", "First legal move engine", "Random engine" };
+
+std::string getPromptForColor(const std::string& color) {
+    std::string prompt;
+    prompt += "Who should play for ";
+    prompt += color;
+    prompt += "? (";
+    for (std::size_t i = 0; i < PLAYERS.size(); ++i) {
+        prompt += std::to_string(i) + ": " + PLAYERS[i];
+        if (i < PLAYERS.size() - 1) {
+            prompt += ", ";
+        }
+    }
+    prompt += "): ";
+    return prompt;
+}
 void printMoveList(const Board &board, const Movelist &moves) {
     printf("Listing all possible moves:\n");
     for (const auto& move : moves) {
@@ -72,38 +89,49 @@ void printGameResult(const Board &board) {
     printf("Game over! %s, due to %s.\n", result_str.c_str(), result_reason_str.c_str());
 }
 
+std::function<Move(const Board&)> getPlayerMoveGetter(std::size_t player_choice) {
+    switch (player_choice) {
+        case 0:
+            return getUserMove;
+        case 1:
+            return firstLegalMoveEngine::findMove;
+        case 2:
+            return randomMoveEngine::findMove;
+        default:
+            printf("Invalid choice for player.\n");
+            exit(1);
+    }
+}
+
+std::pair<std::size_t, std::size_t> getPlayersFromUser() {
+    std::size_t white_player_choice;
+    std::size_t black_player_choice;
+
+    printf(getPromptForColor("white").c_str());
+    std::cin >> white_player_choice;
+
+    printf(getPromptForColor("black").c_str());
+    std::cin >> black_player_choice;
+
+    return std::make_pair(white_player_choice, black_player_choice);
+}
+
 int main() {
     Board board;
     printf("Initial board position: %s\n", board.getFen(true).c_str());
 
     std::string pgn_string;
 
-    bool play_against_engine;
-    char choice;
-    printf("Do you want to play against the engine? (y/n): ");
-    std::cin >> choice;
-    play_against_engine = (choice == 'y' || choice == 'Y');
+    const auto [white_player_choice, black_player_choice] = getPlayersFromUser();
 
-    bool player_is_white = true;
+    auto getWhiteMove = getPlayerMoveGetter(white_player_choice);
+    auto getBlackMove = getPlayerMoveGetter(black_player_choice);
 
     while (board.isGameOver().second == GameResult::NONE) {
         bool is_whites_move = (board.getFen(true).find(" w ") != std::string::npos);
-        bool is_players_turn = (player_is_white == is_whites_move);
 
         // Get turn's move
-        Move this_turns_move;
-        if (play_against_engine) {
-            if (is_players_turn) {
-                // User's move
-                this_turns_move = getUserMove(board);
-            } else {
-                // Engine's move
-                this_turns_move = firstLegalMoveEngine::findMove(board);
-            }
-        } else {
-            // Engine vs Engine
-            this_turns_move = firstLegalMoveEngine::findMove(board);
-        }
+        Move this_turns_move = is_whites_move ? getWhiteMove(board) : getBlackMove(board);
 
         // Add move to PGN
         if (is_whites_move) {
