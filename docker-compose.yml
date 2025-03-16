@@ -1,0 +1,8 @@
+services:
+    play-ground:
+        build: .
+        image: c-play-ground
+        volumes:
+            - ./:/app/
+            - /app/compiled
+            - /app/chess-lib
