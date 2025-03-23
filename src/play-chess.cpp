@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include "engines/first-legal-move/first-legal-move.hpp"
 #include "engines/random-move/random-move.hpp"
+#include "chess_utils/chess_utils.hpp"
 #include "lib/chess.hpp"
 using namespace chess;
 
@@ -116,6 +117,15 @@ std::pair<std::size_t, std::size_t> getPlayersFromUser() {
     return std::make_pair(white_player_choice, black_player_choice);
 }
 
+// Somehow write a function to find all the pawn attacks
+// getPawnAttacks(const Board& board) {
+//     attacks::pawn(Color c, Square sq)
+// }
+
+Bitboard getAllKnights(const Board& board, Color color) {
+    return board.pieces(PieceType::KNIGHT, color);
+}
+
 int main() {
     Board board;
     printf("Initial board position: %s\n", board.getFen(true).c_str());
@@ -129,6 +139,11 @@ int main() {
 
     while (board.isGameOver().second == GameResult::NONE) {
         bool is_whites_move = (board.getFen(true).find(" w ") != std::string::npos);
+        std::string turn_color = is_whites_move ? "White" : "Black";
+
+        const Bitboard knights_bitboard = getAllKnights(board, is_whites_move ? Color::WHITE : Color::BLACK);
+        const std::string knights_bitboard_string = chessUtils::bitboardToString(knights_bitboard);
+        printf("%s's knights bits:\n%s", turn_color.c_str(), knights_bitboard_string.c_str());
 
         // Get turn's move
         Move this_turns_move = is_whites_move ? getWhiteMove(board) : getBlackMove(board);
@@ -142,8 +157,7 @@ int main() {
             pgn_string += "\n";
         }
 
-        std::string color = is_whites_move ? "White" : "Black";
-        printf("%s's move: %s\n", color.c_str(), uci::moveToUci(this_turns_move).c_str());
+        printf("%s's move: %s\n", turn_color.c_str(), uci::moveToUci(this_turns_move).c_str());
 
         board.makeMove(this_turns_move);
     }
