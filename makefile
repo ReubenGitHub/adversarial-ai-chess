@@ -1,5 +1,6 @@
 CC=g++
-CFLAGS=-Wall -Wextra
+ROOT_DIR=./
+CFLAGS=-Wall -Wextra -I$(ROOT_DIR)
 
 SOURCES=$(shell find . -name "*.cpp")
 EXECUTABLE=play-chess

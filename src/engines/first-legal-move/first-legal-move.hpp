@@ -1,4 +1,4 @@
-#include "../../lib/chess.hpp"
+#include "lib/chess.hpp"
 using namespace chess;
 
 namespace firstLegalMoveEngine {

@@ -1,6 +1,6 @@
 #include <stdio.h>
-#include "../../lib/chess.hpp"
 #include "first-legal-move.hpp"
+#include "lib/chess.hpp"
 using namespace chess;
 
 Move firstLegalMoveEngine::findMove(const Board &board) {

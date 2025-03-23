@@ -1,6 +1,6 @@
 #include <stdio.h>
-#include "../../lib/chess.hpp"
 #include "random-move.hpp"
+#include "lib/chess.hpp"
 using namespace chess;
 
 Move randomMoveEngine::findMove(const Board &board) {
