@@ -76,11 +76,11 @@ void printGameResult(const Board &board) {
     }
 
     std::string result_str;
-    if (game_over.second == GameResult::WIN) {
+    if (game_over.second == GameResult::LOSE) {
         if (board.sideToMove() == Color::WHITE) {
-            result_str = "White wins";
-        } else {
             result_str = "Black wins";
+        } else {
+            result_str = "White wins";
         }
     } else {
         result_str = "Draw";
