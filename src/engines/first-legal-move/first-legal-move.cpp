@@ -1,5 +1,5 @@
 #include <stdio.h>
-#include "../../chess-lib/chess.hpp"
+#include "../../lib/chess.hpp"
 #include "first-legal-move.hpp"
 using namespace chess;
 

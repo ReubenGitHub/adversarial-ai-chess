@@ -1,6 +1,6 @@
 FROM gcc:14.2.0
 
-WORKDIR /app/chess-lib
+WORKDIR /app/lib
 RUN wget https://github.com/Disservin/chess-library/raw/master/include/chess.hpp
 WORKDIR /app
 

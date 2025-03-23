@@ -1,6 +1,6 @@
-#include "../../chess-lib/chess.hpp"
+#include "../../lib/chess.hpp"
 using namespace chess;
 
-namespace firstLegalMoveEngine {
+namespace randomMoveEngine {
     extern Move findMove(const Board& board);
 }

@@ -4,5 +4,5 @@ services:
         image: c-play-ground
         volumes:
             - ./:/app/
-            - /app/compiled
-            - /app/chess-lib
+            - /app/bin
+            - /app/lib

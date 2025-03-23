@@ -3,8 +3,8 @@ CFLAGS=-Wall -Wextra
 
 SOURCES=$(shell find . -name "*.cpp")
 EXECUTABLE=play-chess
-COMPILED_DIR=./compiled
-TARGET_FILE=$(COMPILED_DIR)/$(EXECUTABLE)
+BIN_DIR=./bin
+TARGET_FILE=$(BIN_DIR)/$(EXECUTABLE)
 
 $(EXECUTABLE):
 	$(CC) $(CFLAGS) -o $(TARGET_FILE) $(SOURCES)
