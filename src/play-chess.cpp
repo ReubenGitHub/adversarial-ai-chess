@@ -130,20 +130,6 @@ int main() {
     while (board.isGameOver().second == GameResult::NONE) {
         bool is_whites_move = (board.getFen(true).find(" w ") != std::string::npos);
 
-        // Generate and print all available attacking moves
-        Movelist legal_moves;
-        movegen::legalmoves(legal_moves, board);
-
-        printf("Available attacking moves:\n");
-        for (const auto& move : legal_moves) {
-            if (board.at(move.to()) != Piece::NONE) { // Check if the move is an attack
-                std::string uci_move = uci::moveToUci(move);
-                std::string san_move = uci::moveToSan(board, move);
-                printf("UCI Move: %s, SAN Move: %s\n", uci_move.c_str(), san_move.c_str());
-            }
-        }
-
-
         // Get turn's move
         Move this_turns_move = is_whites_move ? getWhiteMove(board) : getBlackMove(board);
 
